@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_blocks_texts",
+  "info": {
+    "displayName": "Text",
+    "icon": "italic"
+  },
+  "options": {},
+  "attributes": {
+    "style": {
+      "type": "enumeration",
+      "enum": [
+        "primary",
+        "secondary",
+        "accent",
+        "dark",
+        "white"
+      ]
+    },
+    "content": {
+      "type": "blocks"
+    }
+  },
+  "config": {}
+}

@@ -1,0 +1,48 @@
+{
+  "collectionName": "components_cosmetic_shapes",
+  "info": {
+    "displayName": "Shape",
+    "icon": "star"
+  },
+  "options": {},
+  "attributes": {
+    "type": {
+      "type": "enumeration",
+      "required": true,
+      "default": "circle",
+      "enum": [
+        "circle",
+        "triangle"
+      ]
+    },
+    "position": {
+      "type": "enumeration",
+      "required": true,
+      "default": "top-left",
+      "enum": [
+        "top-right",
+        "top-left",
+        "bottom-right",
+        "bottom-left"
+      ]
+    },
+    "size": {
+      "type": "decimal",
+      "required": true,
+      "default": 1,
+      "min": 0.1
+    },
+    "style": {
+      "type": "enumeration",
+      "required": true,
+      "default": "secondary",
+      "enum": [
+        "primary",
+        "secondary",
+        "accent",
+        "dark"
+      ]
+    }
+  },
+  "config": {}
+}

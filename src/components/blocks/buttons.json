@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_blocks_buttons",
+  "info": {
+    "displayName": "Buttons",
+    "icon": "bold"
+  },
+  "options": {},
+  "attributes": {
+    "style": {
+      "type": "enumeration",
+      "enum": [
+        "primary",
+        "secondary",
+        "accent",
+        "background"
+      ]
+    },
+    "buttons": {
+      "type": "component",
+      "component": "inputs.button",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

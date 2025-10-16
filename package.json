@@ -12,7 +12,9 @@
     "start": "strapi start",
     "strapi": "strapi",
     "upgrade": "npx @strapi/upgrade latest",
-    "upgrade:dry": "npx @strapi/upgrade latest --dry"
+    "upgrade:dry": "npx @strapi/upgrade latest --dry",
+    "push-types": "cp ./types/generated/* ../site/types/"
+
   },
   "dependencies": {
     "@strapi/plugin-cloud": "5.27.0",

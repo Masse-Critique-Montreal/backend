@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_blocks_notes",
+  "info": {
+    "displayName": "Note",
+    "icon": "lightbulb"
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "blocks"
+    },
+    "style": {
+      "type": "enumeration",
+      "enum": [
+        "primary",
+        "secondary",
+        "accent",
+        "background",
+        "dark"
+      ]
+    },
+    "shapes": {
+      "type": "component",
+      "component": "cosmetic.shape",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

@@ -1,0 +1,32 @@
+{
+  "collectionName": "components_inputs_buttons",
+  "info": {
+    "displayName": "Button",
+    "icon": "bold"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "href": {
+      "type": "string"
+    },
+    "variant": {
+      "type": "enumeration",
+      "enum": [
+        "default",
+        "defaultGreen",
+        "defaultBlue",
+        "black",
+        "destructive",
+        "outline",
+        "secondary",
+        "ghost",
+        "link"
+      ]
+    }
+  },
+  "config": {}
+}
