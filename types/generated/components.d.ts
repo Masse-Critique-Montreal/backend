@@ -105,7 +105,9 @@ export interface InputsButton extends Struct.ComponentSchema {
     icon: 'bold';
   };
   attributes: {
-    href: Schema.Attribute.String;
+    href: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'#'>;
     label: Schema.Attribute.String & Schema.Attribute.Required;
     variant: Schema.Attribute.Enumeration<
       [
@@ -119,7 +121,9 @@ export interface InputsButton extends Struct.ComponentSchema {
         'ghost',
         'link',
       ]
-    >;
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'default'>;
   };
 }
 

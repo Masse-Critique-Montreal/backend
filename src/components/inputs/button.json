@@ -11,10 +11,14 @@
       "required": true
     },
     "href": {
-      "type": "string"
+      "type": "string",
+      "default": "#",
+      "required": true
     },
     "variant": {
       "type": "enumeration",
+      "required": true,
+      "default": "default",
       "enum": [
         "default",
         "defaultGreen",

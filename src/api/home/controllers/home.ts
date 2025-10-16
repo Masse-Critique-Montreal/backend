@@ -3,7 +3,6 @@
  */
 import { factories } from '@strapi/strapi';
 import { exec } from 'node:child_process';
-import path from 'path';
 
 export default factories.createCoreController('api::home.home', ({ }) => ({
   async buildSite(ctx) {
