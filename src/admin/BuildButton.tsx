@@ -1,4 +1,4 @@
-import { useNotification } from "@strapi/strapi/admin";
+import { useFetchClient, useNotification } from "@strapi/strapi/admin";
 import React, { useRef, useState } from "react";
 
 export function Spinner() {
@@ -53,6 +53,8 @@ export default function BuildButton() {
   const { toggleNotification } = useNotification();
   const consoleRef = useRef<HTMLDivElement|null>(null);
 
+  const { get } = useFetchClient();
+
   const handleClick = async () => {
     setLoading(true);
     setResponse('');
@@ -60,15 +62,9 @@ export default function BuildButton() {
     toggleNotification({ type: 'info', message: 'Starting site build... this may take a few minutes' });
 
     try {
-      const res = await fetch('/api/home/build', {
-        method:'GET',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('jwtToken')?.replaceAll('"', '')}`
-        }
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const { data } = await res.json();
-      setResponse(data);
+      const { data } = await get('/users-permissions/sitebuild', {});
+      console.log('resposne', data)
+      setResponse(data.data);
 
       toggleNotification({ type: 'success', message: 'Build finished' });
     } catch (error: any) {
