@@ -38,7 +38,8 @@
         "blocks.text",
         "blocks.image",
         "blocks.note",
-        "blocks.buttons"
+        "blocks.buttons",
+        "blocks.political-party"
       ]
     },
     "seo": {

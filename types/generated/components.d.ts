@@ -52,6 +52,35 @@ export interface BlocksNote extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksPoliticalParty extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_political_parties';
+  info: {
+    displayName: 'PoliticalParty';
+    icon: 'television';
+  };
+  attributes: {
+    description: Schema.Attribute.Blocks;
+    headline: Schema.Attribute.String;
+    image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    imageAlignment: Schema.Attribute.Enumeration<['top', 'bottom']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'top'>;
+    rating: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 10;
+          min: 0;
+        },
+        number
+      >;
+    variant: Schema.Attribute.Enumeration<
+      ['primary', 'secondary', 'accent', 'dark', 'white']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'white'>;
+  };
+}
+
 export interface BlocksText extends Struct.ComponentSchema {
   collectionName: 'components_blocks_texts';
   info: {
@@ -151,6 +180,7 @@ declare module '@strapi/strapi' {
       'blocks.hero': BlocksHero;
       'blocks.image': BlocksImage;
       'blocks.note': BlocksNote;
+      'blocks.political-party': BlocksPoliticalParty;
       'blocks.text': BlocksText;
       'cosmetic.shape': CosmeticShape;
       'inputs.button': InputsButton;

@@ -529,7 +529,13 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
   };
   attributes: {
     blocks: Schema.Attribute.DynamicZone<
-      ['blocks.text', 'blocks.image', 'blocks.note', 'blocks.buttons']
+      [
+        'blocks.text',
+        'blocks.image',
+        'blocks.note',
+        'blocks.buttons',
+        'blocks.political-party',
+      ]
     > &
       Schema.Attribute.SetPluginOptions<{
         i18n: {

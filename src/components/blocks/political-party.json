@@ -1,0 +1,53 @@
+{
+  "collectionName": "components_blocks_political_parties",
+  "info": {
+    "displayName": "PoliticalParty",
+    "icon": "television"
+  },
+  "options": {},
+  "attributes": {
+    "headline": {
+      "type": "string"
+    },
+    "description": {
+      "type": "blocks"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "rating": {
+      "type": "integer",
+      "min": 0,
+      "max": 10
+    },
+    "imageAlignment": {
+      "type": "enumeration",
+      "required": true,
+      "default": "top",
+      "enum": [
+        "top",
+        "bottom"
+      ]
+    },
+    "variant": {
+      "type": "enumeration",
+      "required": true,
+      "default": "white",
+      "enum": [
+        "primary",
+        "secondary",
+        "accent",
+        "dark",
+        "white"
+      ]
+    }
+  },
+  "config": {}
+}
