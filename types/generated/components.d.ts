@@ -134,6 +134,9 @@ export interface InputsButton extends Struct.ComponentSchema {
     icon: 'bold';
   };
   attributes: {
+    calendar_link: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
     href: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'#'>;

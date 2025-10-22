@@ -30,6 +30,11 @@
         "ghost",
         "link"
       ]
+    },
+    "calendar_link": {
+      "type": "boolean",
+      "required": true,
+      "default": false
     }
   },
   "config": {}
