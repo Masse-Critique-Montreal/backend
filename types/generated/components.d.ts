@@ -65,7 +65,7 @@ export interface BlocksPoliticalParty extends Struct.ComponentSchema {
     imageAlignment: Schema.Attribute.Enumeration<['top', 'bottom']> &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'top'>;
-    rating: Schema.Attribute.Integer &
+    rating: Schema.Attribute.Decimal &
       Schema.Attribute.SetMinMax<
         {
           max: 10;

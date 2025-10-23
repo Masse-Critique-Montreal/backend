@@ -23,7 +23,7 @@
       ]
     },
     "rating": {
-      "type": "integer",
+      "type": "decimal",
       "min": 0,
       "max": 10
     },
