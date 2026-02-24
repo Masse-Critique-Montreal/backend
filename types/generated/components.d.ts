@@ -34,6 +34,8 @@ export interface BlocksImage extends Struct.ComponentSchema {
   };
   attributes: {
     image: Schema.Attribute.Media<'images' | 'files'>;
+    pictureBy: Schema.Attribute.String;
+    pictureByLink: Schema.Attribute.String;
   };
 }
 
@@ -149,6 +151,7 @@ export interface InputsButton extends Struct.ComponentSchema {
         'black',
         'destructive',
         'outline',
+        'outlineWhite',
         'secondary',
         'ghost',
         'link',

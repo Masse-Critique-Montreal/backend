@@ -12,10 +12,12 @@
   "pluginOptions": {},
   "attributes": {
     "name": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "email": {
-      "type": "email"
+      "type": "email",
+      "required": true
     },
     "picture": {
       "type": "media",
@@ -37,6 +39,11 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "admin::user"
+    },
+    "link": {
+      "type": "string",
+      "required": true,
+      "regex": "^https?:\\/\\/\\S+$"
     }
   }
 }
