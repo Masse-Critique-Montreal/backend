@@ -93,6 +93,15 @@
         "videos",
         "audios"
       ]
+    },
+    "readTimeMin": {
+      "type": "integer",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      },
+      "default": 2
     }
   }
 }

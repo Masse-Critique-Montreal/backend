@@ -39,6 +39,33 @@ export interface BlocksImage extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksLink extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_links';
+  info: {
+    displayName: 'Link';
+    icon: 'code';
+  };
+  attributes: {
+    Label: Schema.Attribute.String;
+    link: Schema.Attribute.String;
+    thumbnail: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+  };
+}
+
+export interface BlocksLinkSection extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_link_sections';
+  info: {
+    displayName: 'LinkSection';
+    icon: 'bulletList';
+  };
+  attributes: {
+    Links: Schema.Attribute.Component<'blocks.link', true>;
+  };
+}
+
 export interface BlocksNote extends Struct.ComponentSchema {
   collectionName: 'components_blocks_notes';
   info: {
@@ -185,6 +212,8 @@ declare module '@strapi/strapi' {
       'blocks.buttons': BlocksButtons;
       'blocks.hero': BlocksHero;
       'blocks.image': BlocksImage;
+      'blocks.link': BlocksLink;
+      'blocks.link-section': BlocksLinkSection;
       'blocks.note': BlocksNote;
       'blocks.political-party': BlocksPoliticalParty;
       'blocks.text': BlocksText;
