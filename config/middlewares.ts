@@ -1,7 +1,21 @@
 export default [
   'strapi::logger',
   'strapi::errors',
-  'strapi::security',
+  {
+    name: 'strapi::security',
+    config: {
+      contentSecurityPolicy: {
+        useDefaults: true,
+        directives: {
+          'connect-src': ["'self'", 'https:'],
+          // Adding 'self' and blob: allows local uploads and previews to work
+          'img-src': ["'self'", 'data:', 'blob:', 'market-assets.strapi.io'],
+          'media-src': ["'self'", 'data:', 'blob:'],
+          upgradeInsecureRequests: null,
+        },
+      },
+    },
+  },
   'strapi::cors',
   'strapi::poweredBy',
   'strapi::query',
