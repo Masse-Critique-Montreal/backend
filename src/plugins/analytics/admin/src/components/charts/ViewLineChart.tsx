@@ -3,20 +3,31 @@ import ChartComponent from "../ChartComponent";
 import { useEffect, useState } from "react";
 import { PLUGIN_ID } from "../../pluginId";
 import QueryString from "qs";
+import { SingleSelect } from "@strapi/design-system";
+import { SingleSelectOption } from "@strapi/design-system";
+import { group } from "console";
 
 
 export default function ViewLineChart() {
 
-    const [data, setData] = useState<{data:{
-        count: number,
-        day: string
-    }[]}>();
-    const [dataViews, setDataViews] = useState<{data:{
-        count: number
-    }[]}>();
-    const [bottomViews, setBottomViews] = useState<{data:{
-        count: number
-    }[]}>();
+    const [frequency, setFrequency] = useState<'day'|'week'|'month'>('day');
+
+    const [data, setData] = useState<{
+        data: {
+            count: number,
+            day: string
+        }[]
+    }>();
+    const [dataViews, setDataViews] = useState<{
+        data: {
+            count: number
+        }[]
+    }>();
+    const [bottomViews, setBottomViews] = useState<{
+        data: {
+            count: number
+        }[]
+    }>();
 
     const { get, post } = useFetchClient();
 
@@ -24,15 +35,21 @@ export default function ViewLineChart() {
         const fetchData = async () => {
             try {
                 // The URL is automatically prefixed with /plugin-name
-                const response = await get(`/${PLUGIN_ID}/sessions`);
+                const response = await get(`/${PLUGIN_ID}/sessions?${QueryString.stringify({
+                    groupBy: frequency
+                })}`);
                 setData(response.data);
 
-                const responseViews = await get(`/${PLUGIN_ID}/page-views`);
+                const responseViews = await get(`/${PLUGIN_ID}/page-views?${QueryString.stringify({
+                    groupBy: frequency
+                })}`);
                 setDataViews(responseViews.data)
+                console.log(responseViews.data)
 
 
                 const responseBottomViews = await get(`/${PLUGIN_ID}/page-views?${QueryString.stringify({
-                    where: { 'bottom':true }
+                    where: { 'bottom': true },
+                    groupBy: frequency
                 })}`);
                 console.log(responseBottomViews)
                 setBottomViews(responseBottomViews.data)
@@ -46,7 +63,7 @@ export default function ViewLineChart() {
 
 
         fetchData();
-    }, [get, post]);
+    }, [get, post, frequency]);
 
 
     const chartData = {
@@ -73,6 +90,17 @@ export default function ViewLineChart() {
     }
 
     return (
-        <ChartComponent data={chartData} title="New Users" />
+        <div style={{ minHeight: '350px', maxHeight: '450px', height: '100%' }}>
+            <div style={{display:'flex', justifyContent:'end'}}>
+
+                <SingleSelect label="frequency" placeholder="Select..." value={frequency} onChange={(value: string) => setFrequency(value)}>
+                    <SingleSelectOption value="day">Day</SingleSelectOption>
+                    <SingleSelectOption value="week">Week</SingleSelectOption>
+                    <SingleSelectOption value="month">Month</SingleSelectOption>
+                </SingleSelect>
+            </div>
+
+            <ChartComponent data={chartData} title="" />
+        </div>
     );
 }

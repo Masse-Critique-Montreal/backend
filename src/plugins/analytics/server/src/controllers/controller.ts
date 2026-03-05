@@ -4,6 +4,8 @@ console.log('Loaded analytics controller');
 type Knex = typeof strapi.db.connection;
 type QueryBuilder = ReturnType<Knex['queryBuilder']>;
 
+type GroupBy = 'day' | 'week' | 'month';
+
 async function getChartData(
   knex: Knex,
   table: string,
@@ -11,31 +13,39 @@ async function getChartData(
     dateColumn?: string;
     countColumn?: string;
     where?: Record<string, unknown> | ((builder: QueryBuilder) => void);
-    dateFormat?: string;
+    groupBy?: GroupBy;
   }
 ) {
   const {
     dateColumn = 'created_at',
     countColumn = 'id',
     where,
-    dateFormat = 'DATE',
+    groupBy = 'day',
   } = options ?? {};
 
+  const formatMap: Record<GroupBy, string> = {
+    day: `DATE(${dateColumn})`,
+    week: `DATE(${dateColumn}, 'weekday 0', '-6 days')`,
+    month: `STRFTIME('%Y-%m-01', ${dateColumn})`,
+  };
+
+  const groupExpr = formatMap[groupBy];
+
   let query = knex(table)
-    .select(knex.raw(`${dateFormat}(${dateColumn}) as day`))
+    .select(knex.raw(`${groupExpr} as day`))
     .count(`${countColumn} as count`)
     .groupBy('day')
     .orderBy('day', 'asc');
 
-    if (where) {
-      for (const [key, value] of Object.entries(where)) {
-        if (typeof value === 'boolean') {
-          query.where(key, value ? 1 : 0);
-        } else {
-          query.where(key, value as any);
-        }
+  if (where) {
+    for (const [key, value] of Object.entries(where)) {
+      if (typeof value === 'boolean') {
+        query.where(key, value ? 1 : 0);
+      } else {
+        query.where(key, value as any);
       }
     }
+  }
 
   return query;
 }
@@ -60,7 +70,7 @@ export async function getRealTimeData(
 
   const filled: { minute: number; views: number }[] = [];
   for (let i = 0; i <= 29; i++) {
-    const match = (rows as unknown as { minute: number, views: number}[]).find((r) => Number(r.minute) === i);
+    const match = (rows as unknown as { minute: number, views: number }[]).find((r) => Number(r.minute) === i);
     filled.push({ minute: i, views: match ? Number(match.views) : 0 });
   }
   console.log(filled);
@@ -76,16 +86,7 @@ const controller = ({ strapi }: { strapi: Core.Strapi }) => ({
       .getWelcomeMessage();
   },
   async getSessionsChart(ctx) {
-    const knex = strapi.db.connection;
-    const table = 'analytics_sessions';
-  
-    // This SQL groups by the date part of 'created_at' and counts IDs
-    // Note: 'date' function syntax varies slightly by DB (SQLite vs Postgres/MySQL)
-    const data = await knex(table)
-      .select(knex.raw("DATE(created_at) as day"))
-      .count('id as count')
-      .groupBy('day')
-      .orderBy('day', 'asc');
+    const data = await getChartData(strapi.db.connection, 'analytics_sessions', { groupBy: ctx.query.groupBy ?? 'day' });
 
     ctx.send({ data });
   },
@@ -96,27 +97,25 @@ const controller = ({ strapi }: { strapi: Core.Strapi }) => ({
   async getPageViewChart(ctx) {
     const filters = ctx.query.where as Record<string, string> | undefined;
 
-    console.log('raw query:', ctx.query);
-    console.log('filters:', ctx.query.filters);
     const where = filters
       ? Object.fromEntries(
-          Object.entries(filters).map(([key, value]) => {
-            if (value === 'true') return [key, true];
-            if (value === 'false') return [key, false];
-            if (!isNaN(Number(value))) return [key, Number(value)];
-            return [key, value];
-          })
-        )
+        Object.entries(filters).map(([key, value]) => {
+          if (value === 'true') return [key, true];
+          if (value === 'false') return [key, false];
+          if (!isNaN(Number(value))) return [key, Number(value)];
+          return [key, value];
+        })
+      )
       : undefined;
-  
-    const data = await getChartData(strapi.db.connection, 'analytics_page_views', { where });
-  
+
+    const data = await getChartData(strapi.db.connection, 'analytics_page_views', { where, groupBy: ctx.query.groupBy ?? 'day' });
+
     ctx.send({ data });
   },
   async getReferrerChart(ctx) {
     const knex = strapi.db.connection;
     const table = 'analytics_page_views';
-  
+
     try {
       const data = await knex(table)
         // Use coalesce to label empty/null referrers as "Direct"
@@ -125,7 +124,7 @@ const controller = ({ strapi }: { strapi: Core.Strapi }) => ({
         .groupBy('referrer')
         .orderBy('count', 'desc')
         .limit(10); // Show top 10 sources
-  
+
       ctx.send({ data });
     } catch (err) {
       strapi.log.error('Failed to fetch referrer chart data', err);
@@ -135,7 +134,7 @@ const controller = ({ strapi }: { strapi: Core.Strapi }) => ({
   async getPageViewsBarChart(ctx) {
     const knex = strapi.db.connection;
     const table = 'analytics_page_views';
-  
+
     try {
       const data = await knex(table)
         .select('url')
@@ -143,7 +142,7 @@ const controller = ({ strapi }: { strapi: Core.Strapi }) => ({
         .groupBy('url')
         .orderBy('views', 'desc')
         .limit(200); // Top 10 pages to keep the bar chart clean
-  
+
       ctx.send({ data });
     } catch (err) {
       strapi.log.error('Failed to fetch page views chart data', err);
@@ -186,8 +185,8 @@ const controller = ({ strapi }: { strapi: Core.Strapi }) => ({
       .orderBy(sort, order)
       .limit(limit)
       .offset(offset);
-      console.log(data);
-    
+    console.log(data);
+
     ctx.send({
       data,
       meta: {
