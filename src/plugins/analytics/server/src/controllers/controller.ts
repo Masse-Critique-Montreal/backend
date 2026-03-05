@@ -1,5 +1,72 @@
 import type { Core } from "@strapi/strapi";
-console.log('Loaded analytics controller')
+console.log('Loaded analytics controller');
+
+type Knex = typeof strapi.db.connection;
+type QueryBuilder = ReturnType<Knex['queryBuilder']>;
+
+async function getChartData(
+  knex: Knex,
+  table: string,
+  options?: {
+    dateColumn?: string;
+    countColumn?: string;
+    where?: Record<string, unknown> | ((builder: QueryBuilder) => void);
+    dateFormat?: string;
+  }
+) {
+  const {
+    dateColumn = 'created_at',
+    countColumn = 'id',
+    where,
+    dateFormat = 'DATE',
+  } = options ?? {};
+
+  let query = knex(table)
+    .select(knex.raw(`${dateFormat}(${dateColumn}) as day`))
+    .count(`${countColumn} as count`)
+    .groupBy('day')
+    .orderBy('day', 'asc');
+
+    if (where) {
+      for (const [key, value] of Object.entries(where)) {
+        if (typeof value === 'boolean') {
+          query.where(key, value ? 1 : 0);
+        } else {
+          query.where(key, value as any);
+        }
+      }
+    }
+
+  return query;
+}
+
+export async function getRealTimeData(
+  connection: Knex,
+  table: string
+): Promise<{ minute: number; views: number }[]> {
+  const now = new Date();
+  const thirtyMinutesAgo = new Date(now.getTime() - 30 * 60 * 1000);
+
+  const rows = await connection(table)
+    .select(
+      connection.raw(`
+        CAST((strftime('%s', 'now') - strftime('%s', created_at)) / 60 AS INTEGER) as minute,
+        COUNT(*) as views
+      `)
+    )
+    .where('created_at', '>=', thirtyMinutesAgo.toISOString())
+    .groupByRaw(`CAST((strftime('%s', 'now') - strftime('%s', created_at)) / 60 AS INTEGER)`)
+    .orderBy('minute', 'asc');
+
+  const filled: { minute: number; views: number }[] = [];
+  for (let i = 0; i <= 29; i++) {
+    const match = rows.find((r) => Number(r.minute) === i);
+    filled.push({ minute: i, views: match ? Number(match.views) : 0 });
+  }
+  console.log(filled);
+  return filled;
+}
+
 const controller = ({ strapi }: { strapi: Core.Strapi }) => ({
   index(ctx) {
     ctx.body = strapi
@@ -22,18 +89,28 @@ const controller = ({ strapi }: { strapi: Core.Strapi }) => ({
 
     ctx.send({ data });
   },
+  async getRealtimeChart(ctx) {
+    const data = await getRealTimeData(strapi.db.connection, 'analytics_page_views');
+    ctx.send({ data });
+  },
   async getPageViewChart(ctx) {
-    const knex = strapi.db.connection;
-    const table = 'analytics_page_views';
+    const filters = ctx.query.where as Record<string, string> | undefined;
+
+    console.log('raw query:', ctx.query);
+    console.log('filters:', ctx.query.filters);
+    const where = filters
+      ? Object.fromEntries(
+          Object.entries(filters).map(([key, value]) => {
+            if (value === 'true') return [key, true];
+            if (value === 'false') return [key, false];
+            if (!isNaN(Number(value))) return [key, Number(value)];
+            return [key, value];
+          })
+        )
+      : undefined;
   
-    // This SQL groups by the date part of 'created_at' and counts IDs
-    // Note: 'date' function syntax varies slightly by DB (SQLite vs Postgres/MySQL)
-    const data = await knex(table)
-      .select(knex.raw("DATE(created_at) as day"))
-      .count('id as count')
-      .groupBy('day')
-      .orderBy('day', 'asc');
-      
+    const data = await getChartData(strapi.db.connection, 'analytics_page_views', { where });
+  
     ctx.send({ data });
   },
   async getReferrerChart(ctx) {

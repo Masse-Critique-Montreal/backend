@@ -4,6 +4,7 @@ import PagesBarChart from "../components/charts/PagesBarChart";
 import ReffererBarChart from "../components/charts/ReffererBarChart";
 import PagesViewTable from "../components/charts/PageViewTable";
 import PieChart from "../components/PieChart";
+import RealTimeChart from "../components/charts/RealTimeChart";
 
 
 const HomePage = () => {
@@ -17,28 +18,18 @@ const HomePage = () => {
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: '8rem',
-          width: '82%',
-          margin: '4rem auto 0px auto'
+          gap: '14rem',
+          width: '86%',
+          margin: '4rem auto 8rem auto',
         }}
           className="charts-grid"
         >
           <div style={{ width: '100%', minHeight: '350px', maxHeight: '450px', height: '100%' }}>
-            <ViewLineChart />
+            <RealTimeChart />
           </div>
 
           <div style={{ minHeight: '350px', maxHeight: '450px', height: '100%' }}>
-            <PieChart
-              title="Traffic by Device"
-              data={{
-                labels: ['Mobile', 'Tablet', 'Desktop'],
-                datasets: [{
-                  data: [42, 28, 18],
-                  backgroundColor: ['#3e99d7', '#5062d0', '#4042b9'],
-                  borderWidth: 0
-                }]
-              }}
-            />
+            <ViewLineChart />
           </div>
 
           <div style={{ minHeight: '350px', maxHeight: '450px', height: '100%' }}>
@@ -62,9 +53,8 @@ const HomePage = () => {
       <style>{`
         @media (max-width: 768px) {
           .container {
+            margin: 0rem auto !important;
             
-            margin: 0rem !important;
-            margin-right: 2rem !important;
           }
 
           h1.title {
@@ -72,9 +62,9 @@ const HomePage = () => {
           }
 
           .charts-grid {
-            width: 100% !important;
+            width: 92% !important;
             gap: 2rem !important;
-            margin: 0px !important;
+            margin: auto !important;
             grid-template-columns: 1fr !important;
           }
 

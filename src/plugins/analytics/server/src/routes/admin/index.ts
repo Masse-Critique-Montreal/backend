@@ -20,6 +20,14 @@ export default () => ({
     },
     {
       method: 'GET',
+      path: '/page-views-realtime',
+      handler: 'analyticsController.getRealtimeChart',
+      config: {
+        policies: ['admin::isAuthenticatedAdmin'],
+      },
+    },
+    {
+      method: 'GET',
       path: '/page-views-meta',
       handler: 'analyticsController.getPageViews',
       config: {

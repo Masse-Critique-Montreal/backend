@@ -8,10 +8,11 @@ import { Table, Thead, Tr, Th, Td, Tbody } from "@strapi/design-system";
 function PageViewRow({ view }: { view: any }) {
     return (
       <Tr style={{ fontSize: '1.4rem' }}>
-        <Td>{view.url}</Td>
+        <Td>{view.url.split('?')[0]}</Td>
         <Td>{view.params ? (view.params.length > 24 ? `${view.params.slice(0,24)}...` : view.params) : '—'}</Td>
         <Td>{view.referrer || '—'}</Td>
         <Td>{view.session_id}</Td>
+        <Td>{view.bottom ? 'Yes' : 'No'}</Td>
         <Td>{view.first_visit ? 'Yes' : 'No'}</Td>
         <Td>{new Date(view.created_at).toLocaleString()}</Td>
       </Tr>
@@ -29,6 +30,7 @@ function PageViewRow({ view }: { view: any }) {
                 <Th>Params</Th>
                 <Th>Referrer</Th>
                 <Th>Session ID</Th>
+                <Th>Seen bottom</Th>
                 <Th>First Visit</Th>
                 <Th>Visited At</Th>
               </Tr>

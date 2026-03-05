@@ -2,6 +2,7 @@ import { useFetchClient } from "@strapi/strapi/admin";
 import ChartComponent from "../ChartComponent";
 import { useEffect, useState } from "react";
 import { PLUGIN_ID } from "../../pluginId";
+import QueryString from "qs";
 
 
 export default function ViewLineChart() {
@@ -13,8 +14,11 @@ export default function ViewLineChart() {
     const [dataViews, setDataViews] = useState<{data:{
         count: number
     }[]}>();
+    const [bottomViews, setBottomViews] = useState<{data:{
+        count: number
+    }[]}>();
 
-    const { get } = useFetchClient();
+    const { get, post } = useFetchClient();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -27,13 +31,22 @@ export default function ViewLineChart() {
                 setDataViews(responseViews.data)
 
 
+                const responseBottomViews = await get(`/${PLUGIN_ID}/page-views?${QueryString.stringify({
+                    where: { 'bottom':true }
+                })}`);
+                console.log(responseBottomViews)
+                setBottomViews(responseBottomViews.data)
+
+
+
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
 
+
         fetchData();
-    }, [get]);
+    }, [get, post]);
 
 
     const chartData = {
@@ -46,6 +59,12 @@ export default function ViewLineChart() {
         {
             label: 'Page Views',
             data: dataViews ? dataViews.data.map(c => c.count) : [],
+
+            borderWidth: 1,
+        },
+        {
+            label: 'Engaged Users',
+            data: bottomViews ? bottomViews.data.map(c => c.count) : [],
 
             borderWidth: 1,
         }],
