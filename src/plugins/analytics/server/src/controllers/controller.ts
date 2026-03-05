@@ -47,7 +47,7 @@ export async function getRealTimeData(
   const now = new Date();
   const thirtyMinutesAgo = new Date(now.getTime() - 30 * 60 * 1000);
 
-  const rows = await connection(table)
+  const rows = (await connection(table)
     .select(
       connection.raw(`
         CAST((strftime('%s', 'now') - strftime('%s', created_at)) / 60 AS INTEGER) as minute,
@@ -56,11 +56,11 @@ export async function getRealTimeData(
     )
     .where('created_at', '>=', thirtyMinutesAgo.toISOString())
     .groupByRaw(`CAST((strftime('%s', 'now') - strftime('%s', created_at)) / 60 AS INTEGER)`)
-    .orderBy('minute', 'asc');
+    .orderBy('minute', 'asc'))
 
   const filled: { minute: number; views: number }[] = [];
   for (let i = 0; i <= 29; i++) {
-    const match = rows.find((r) => Number(r.minute) === i);
+    const match = (rows as unknown as { minute: number, views: number}[]).find((r) => Number(r.minute) === i);
     filled.push({ minute: i, views: match ? Number(match.views) : 0 });
   }
   console.log(filled);
