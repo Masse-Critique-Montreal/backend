@@ -65,7 +65,7 @@ export default function ViewLineChart() {
         fetchData();
     }, [get, post, frequency]);
 
-
+    
     const chartData = {
         datasets: [{
             label: 'New Users',
@@ -90,10 +90,10 @@ export default function ViewLineChart() {
     }
 
     return (
-        <div style={{ minHeight: '350px', maxHeight: '450px', height: '100%' }}>
-            <div style={{display:'flex', justifyContent:'end'}}>
-
-                <SingleSelect label="frequency" placeholder="Select..." value={frequency} onChange={(value: string) => setFrequency(value)}>
+        <div style={{ minHeight: '350px', maxHeight: '450px', height: '100%', paddingBottom: '4rem', paddingTop: '4rem'}}>
+            <div style={{display:'flex', justifyContent:'space-between', margin: '0 1.5rem 3rem 1.5rem '}}>
+                <h3 style={{fontSize: '3rem', fontWeight: 'bold'}}>Views</h3>
+                <SingleSelect label="frequency" placeholder="Select..." value={frequency} onChange={(value: string) => setFrequency(value as 'day'|'week'|'month')}>
                     <SingleSelectOption value="day">Day</SingleSelectOption>
                     <SingleSelectOption value="week">Week</SingleSelectOption>
                     <SingleSelectOption value="month">Month</SingleSelectOption>

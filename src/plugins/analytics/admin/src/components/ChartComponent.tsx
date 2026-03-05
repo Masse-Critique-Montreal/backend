@@ -1,3 +1,4 @@
+import { useIsMobile } from '@strapi/strapi/admin';
 import { Chart } from 'chart.js/auto';
 import { useEffect, useRef } from 'react';
 
@@ -14,6 +15,7 @@ function ChartComponent({ title, data }: {
 }) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const chartInstanceRef = useRef<Chart | null>(null); // Track the actual chart object
+    const isMobile  = useIsMobile();
 
     useEffect(() => {
         if (!canvasRef.current) return;
@@ -31,20 +33,26 @@ function ChartComponent({ title, data }: {
             type: 'line',
             data,
             options: {
-
+     
+                pointRadius: 5,
+                pointHoverRadius: 8,
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
                     y: {
                         min: 0,
-                        suggestedMax: 10, // Try setting a hard number here first to see if it reacts
-                        // 1. Force the axis to start at 0 (optional but helpful)
+                        suggestedMax: 10,
                         beginAtZero: true,
                         ticks: {
-                            // 2. Force the gap between numbers to be exactly 1
                             stepSize: 1,
-                            // 3. Ensure no decimal points are rendered at all
                             precision: 0
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            autoSkipPadding: 3,
+                            minRotation: isMobile ? 75 : 0, 
+                            maxRotation: isMobile ? 90 : 0,
                         }
                     }
                 },
@@ -53,7 +61,7 @@ function ChartComponent({ title, data }: {
 
                 plugins: {
                     legend: { position: 'top' },
-                    title: { display: true, text: title }
+                    title: { display: false, text: title }
                 }
             },
         });

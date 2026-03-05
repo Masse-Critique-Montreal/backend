@@ -28,7 +28,7 @@ const HomePage = () => {
             <RealTimeChart />
           </div>
 
-          <div style={{ minHeight: '350px', maxHeight: '450px', height: '100%' }}>
+          <div style={{ minHeight: '350px', maxHeight: '450px', height: '100%', marginBottom: '6rem' }}>
             <ViewLineChart />
           </div>
 
