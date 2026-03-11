@@ -46,12 +46,10 @@ export interface BlocksLink extends Struct.ComponentSchema {
     icon: 'code';
   };
   attributes: {
+    description: Schema.Attribute.String;
     Label: Schema.Attribute.String;
     link: Schema.Attribute.String;
-    thumbnail: Schema.Attribute.Media<
-      'images' | 'files' | 'videos' | 'audios',
-      true
-    >;
+    thumbnail: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
   };
 }
 

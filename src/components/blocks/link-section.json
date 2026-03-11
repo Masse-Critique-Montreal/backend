@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_blocks_link_sections",
+  "info": {
+    "displayName": "LinkSection",
+    "icon": "bulletList"
+  },
+  "options": {},
+  "attributes": {
+    "Links": {
+      "type": "component",
+      "component": "blocks.link",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

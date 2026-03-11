@@ -647,6 +647,12 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
     };
   };
   attributes: {
+    background: Schema.Attribute.Enumeration<['default', 'accent']> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     blocks: Schema.Attribute.DynamicZone<
       [
         'blocks.text',
@@ -654,6 +660,7 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         'blocks.note',
         'blocks.buttons',
         'blocks.political-party',
+        'blocks.link-section',
       ]
     > &
       Schema.Attribute.SetPluginOptions<{

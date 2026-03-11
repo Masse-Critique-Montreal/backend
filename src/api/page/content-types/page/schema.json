@@ -39,7 +39,8 @@
         "blocks.image",
         "blocks.note",
         "blocks.buttons",
-        "blocks.political-party"
+        "blocks.political-party",
+        "blocks.link-section"
       ]
     },
     "seo": {
@@ -51,6 +52,18 @@
       },
       "component": "seo.meta",
       "repeatable": false
+    },
+    "background": {
+      "type": "enumeration",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "enum": [
+        "default",
+        "accent"
+      ]
     }
   }
 }

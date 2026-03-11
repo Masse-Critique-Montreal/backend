@@ -27,7 +27,8 @@
         "blocks.image",
         "blocks.hero",
         "blocks.note",
-        "blocks.buttons"
+        "blocks.buttons",
+        "blocks.link-section"
       ]
     },
     "seo": {
