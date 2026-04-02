@@ -19,6 +19,13 @@
     },
     "pictureByLink": {
       "type": "string"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "default",
+        "photography"
+      ]
     }
   },
   "config": {}

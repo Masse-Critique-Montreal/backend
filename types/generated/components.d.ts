@@ -36,6 +36,7 @@ export interface BlocksImage extends Struct.ComponentSchema {
     image: Schema.Attribute.Media<'images' | 'files'>;
     pictureBy: Schema.Attribute.String;
     pictureByLink: Schema.Attribute.String;
+    type: Schema.Attribute.Enumeration<['default', 'photography']>;
   };
 }
 
