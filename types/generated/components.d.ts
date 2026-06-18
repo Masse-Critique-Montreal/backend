@@ -74,7 +74,7 @@ export interface BlocksNote extends Struct.ComponentSchema {
   attributes: {
     shapes: Schema.Attribute.Component<'cosmetic.shape', true>;
     style: Schema.Attribute.Enumeration<
-      ['primary', 'secondary', 'accent', 'background', 'dark']
+      ['primary', 'secondary', 'accent', 'background', 'dark', 'kids']
     >;
     text: Schema.Attribute.Blocks;
   };

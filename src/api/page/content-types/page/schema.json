@@ -62,7 +62,8 @@
       },
       "enum": [
         "default",
-        "accent"
+        "accent",
+        "kids"
       ]
     }
   }

@@ -647,7 +647,7 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
     };
   };
   attributes: {
-    background: Schema.Attribute.Enumeration<['default', 'accent']> &
+    background: Schema.Attribute.Enumeration<['default', 'accent', 'kids']> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
