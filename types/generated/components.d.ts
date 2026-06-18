@@ -118,7 +118,7 @@ export interface BlocksText extends Struct.ComponentSchema {
   attributes: {
     content: Schema.Attribute.Blocks;
     style: Schema.Attribute.Enumeration<
-      ['primary', 'secondary', 'accent', 'dark', 'white']
+      ['primary', 'secondary', 'accent', 'dark', 'white', 'kids']
     >;
   };
 }
